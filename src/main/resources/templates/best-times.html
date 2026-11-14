@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wynexa | Best Times</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            color: #1f2440;
+            background: linear-gradient(135deg, #f8f4ff, #eef6ff, #fff1fa);
+        }
+
+        header {
+            width: 100%;
+            background: linear-gradient(90deg, #24104f, #4d2ca3, #2563c9);
+            color: white;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .logo span {
+            color: #ff8bd4;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        nav a:hover {
+            color: #ffb3e3;
+        }
+
+        .container {
+            width: 86%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 0;
+        }
+
+        .title h1 {
+            font-size: 38px;
+            margin-bottom: 8px;
+        }
+
+        .title p {
+            color: #6c6f85;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            min-width: 0;
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 7px 22px rgba(66, 45, 120, 0.10);
+        }
+
+        .best {
+            border-top: 5px solid #3b82f6;
+        }
+
+        .peak {
+            border-top: 5px solid #ec4899;
+        }
+
+        .card p {
+            color: #777b91;
+            margin-bottom: 10px;
+        }
+
+        .card h2 {
+            font-size: 28px;
+        }
+
+        .chart-panel {
+            width: 100%;
+            min-width: 0;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 7px 22px rgba(66, 45, 120, 0.10);
+            overflow: hidden;
+        }
+
+        .chart-panel h2 {
+            margin-bottom: 7px;
+        }
+
+        .chart-description {
+            color: #777b91;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .chart {
+            width: 100%;
+            height: 330px;
+            display: grid;
+            grid-template-columns: repeat(10, minmax(0, 1fr));
+            align-items: end;
+            gap: 8px;
+            padding: 20px 0 0;
+            border-bottom: 2px solid #ece8f5;
+        }
+
+        .bar-group {
+            width: 100%;
+            min-width: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .score {
+            margin-bottom: 7px;
+            font-weight: bold;
+            color: #6d28d9;
+            font-size: 14px;
+        }
+
+        .bar {
+            width: 58%;
+            max-width: 42px;
+            min-width: 12px;
+            border-radius: 10px 10px 0 0;
+            background: linear-gradient(
+                180deg,
+                #ec4899,
+                #8b5cf6,
+                #3b82f6
+            );
+            transition: 0.2s;
+        }
+
+        .bar:hover {
+            opacity: 0.8;
+        }
+
+        .time {
+            margin-top: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #65697c;
+            white-space: nowrap;
+        }
+
+        .legend {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 15px;
+        }
+
+        .legend div {
+            padding: 15px;
+            border-radius: 10px;
+            background: #f7f3ff;
+            text-align: center;
+        }
+
+        .low {
+            color: #2563eb;
+        }
+
+        .medium {
+            color: #7c3aed;
+        }
+
+        .high {
+            color: #db2777;
+        }
+
+        @media (max-width: 800px) {
+            header {
+                padding: 18px 5%;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            nav {
+                width: 100%;
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+
+            nav a {
+                font-size: 14px;
+            }
+
+            .container {
+                width: 92%;
+                padding: 30px 0;
+            }
+
+            .title h1 {
+                font-size: 30px;
+            }
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-panel {
+                padding: 20px 12px;
+            }
+
+            .chart {
+                gap: 3px;
+                height: 280px;
+            }
+
+            .score {
+                font-size: 11px;
+            }
+
+            .time {
+                font-size: 9px;
+            }
+
+            .bar {
+                width: 70%;
+                min-width: 8px;
+            }
+
+            .legend {
+                gap: 7px;
+            }
+
+            .legend div {
+                padding: 10px 5px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        Wyn<span>exa</span>
+    </div>
+
+    <nav>
+        <a href="/">Customer View</a>
+        <a href="/best-times">Best Times</a>
+        <a href="/staff">Staff Dashboard</a>
+    </nav>
+</header>
+
+<main class="container">
+
+    <section class="title">
+        <h1>When should you visit?</h1>
+
+        <p>
+            Historical rush patterns help customers identify
+            quieter periods and avoid peak restaurant traffic.
+        </p>
+    </section>
+
+    <section class="summary">
+
+        <div class="card best">
+            <p>Recommended Time</p>
+
+            <h2 th:text="${bestTime}">
+                4:00 PM
+            </h2>
+
+            <p style="margin-top:10px;">
+                Lowest predicted rush during the analysed period.
+            </p>
+        </div>
+
+        <div class="card peak">
+            <p>Peak Time</p>
+
+            <h2 th:text="${peakTime}">
+                7:00 PM
+            </h2>
+
+            <p style="margin-top:10px;">
+                Highest predicted restaurant demand.
+            </p>
+        </div>
+
+    </section>
+
+    <section class="chart-panel">
+
+        <h2>Historical Rush Pattern</h2>
+
+        <p class="chart-description">
+            Rush score by time slot. A lower score indicates
+            a quieter restaurant period.
+        </p>
+
+        <div class="chart">
+
+            <div class="bar-group"
+                 th:each="score, status : ${rushScores}">
+
+                <span class="score"
+                      th:text="${score}">
+                    50
+                </span>
+
+                <div class="bar"
+                     th:style="'height:' + ${score} + '%'">
+                </div>
+
+                <span class="time"
+                      th:text="${times[status.index]}">
+                    12 PM
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="legend">
+
+            <div>
+                <strong class="low">0–40</strong>
+                <br>
+                Quiet
+            </div>
+
+            <div>
+                <strong class="medium">41–70</strong>
+                <br>
+                Moderate
+            </div>
+
+            <div>
+                <strong class="high">71–100</strong>
+                <br>
+                Busy
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+</body>
+</html>

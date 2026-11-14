@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wynexa | Restaurant Intelligence</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            color: #1f2440;
+            background: linear-gradient(135deg, #f8f4ff, #eef6ff, #fff1fa);
+        }
+
+        header {
+            background: linear-gradient(90deg, #24104f, #4d2ca3, #2563c9);
+            color: white;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #ff8bd4;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            color: #ffb3e3;
+        }
+
+        .container {
+            width: 86%;
+            margin: auto;
+            padding: 40px 0;
+        }
+
+        .hero {
+            margin-bottom: 30px;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            color: #6c6f85;
+            font-size: 17px;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 7px 22px rgba(66, 45, 120, 0.10);
+        }
+
+        .card p {
+            color: #777b91;
+            margin-bottom: 10px;
+        }
+
+        .card h2 {
+            font-size: 27px;
+        }
+
+        .pink {
+            border-top: 5px solid #ec4899;
+        }
+
+        .purple {
+            border-top: 5px solid #8b5cf6;
+        }
+
+        .blue {
+            border-top: 5px solid #3b82f6;
+        }
+
+        .violet {
+            border-top: 5px solid #a855f7;
+        }
+
+        .rush {
+            color: #db2777;
+        }
+
+        .wait-panel {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 7px 22px rgba(66, 45, 120, 0.10);
+            margin-bottom: 25px;
+        }
+
+        .wait-panel h2 {
+            margin-bottom: 8px;
+        }
+
+        .description {
+            color: #777b91;
+            margin-bottom: 22px;
+        }
+
+        form {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        select {
+            width: 220px;
+            padding: 13px;
+            border-radius: 9px;
+            border: 1px solid #ddd6ef;
+            background: white;
+            color: #1f2440;
+        }
+
+        button {
+            padding: 13px 22px;
+            border: none;
+            border-radius: 9px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            background: linear-gradient(90deg, #ec4899, #8b5cf6, #3b82f6);
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .result {
+            margin-top: 22px;
+            padding: 18px;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #fff0fa, #f3edff, #eef6ff);
+            border-left: 5px solid #8b5cf6;
+        }
+
+        .result strong {
+            color: #7e22ce;
+            font-size: 21px;
+        }
+
+        .information {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .info-card {
+            background: white;
+            padding: 28px;
+            border-radius: 16px;
+            box-shadow: 0 7px 22px rgba(66, 45, 120, 0.10);
+        }
+
+        .info-card h2 {
+            margin-bottom: 12px;
+        }
+
+        .info-card p {
+            color: #6c6f85;
+            line-height: 1.5;
+        }
+
+        .status {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 8px 14px;
+            border-radius: 20px;
+            background: #f3e8ff;
+            color: #7e22ce;
+            font-weight: bold;
+        }
+
+        .best-time {
+            margin-top: 15px;
+            display: inline-block;
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .best-time:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 900px) {
+            .dashboard {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .information {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        Wyn<span>exa</span>
+    </div>
+
+    <nav>
+        <a href="/">Customer View</a>
+        <a href="/best-times">Best Times</a>
+        <a href="/staff">Staff Dashboard</a>
+    </nav>
+
+</header>
+
+<main class="container">
+
+    <section class="hero">
+
+        <h1>Know the rush before you arrive.</h1>
+
+        <p>
+            Check live restaurant demand, estimated waiting times
+            and the best time to visit.
+        </p>
+
+    </section>
+
+    <section class="dashboard">
+
+        <div class="card pink">
+            <p>Current Rush</p>
+
+            <h2 class="rush"
+                th:text="${rushLevel}">
+                Very Busy
+            </h2>
+        </div>
+
+        <div class="card purple">
+            <p>Customers Waiting</p>
+
+            <h2 th:text="${queueLength}">
+                5
+            </h2>
+        </div>
+
+        <div class="card blue">
+            <p>Restaurant Capacity</p>
+
+            <h2 th:text="${capacity + '%'}">
+                80%
+            </h2>
+        </div>
+
+        <div class="card violet">
+            <p>Kitchen Orders</p>
+
+            <h2 th:text="${kitchenOrders}">
+                12
+            </h2>
+        </div>
+
+    </section>
+
+    <section class="wait-panel">
+
+        <h2>Estimate Your Wait</h2>
+
+        <p class="description">
+            Choose your party size. The estimate considers
+            restaurant capacity, customer queue pressure and
+            current kitchen workload.
+        </p>
+
+        <form action="/" method="get">
+
+            <select name="partySize" required>
+
+                <option value="">
+                    Select party size
+                </option>
+
+                <option value="1">1 person</option>
+                <option value="2">2 people</option>
+                <option value="3">3 people</option>
+                <option value="4">4 people</option>
+                <option value="5">5 people</option>
+                <option value="6">6 people</option>
+
+            </select>
+
+            <button type="submit">
+                Check Wait Time
+            </button>
+
+        </form>
+
+        <div class="result"
+             th:if="${estimatedWait != null}">
+
+            Estimated wait for
+
+            <span th:text="${partySize}">
+                4
+            </span>
+
+            people:
+
+            <strong>
+                <span th:text="${estimatedWait}">
+                    25
+                </span>
+                minutes
+            </strong>
+
+        </div>
+
+    </section>
+
+    <section class="information">
+
+        <div class="info-card">
+
+            <h2>Rush Intelligence</h2>
+
+            <p>
+                Current restaurant occupancy and queue pressure
+                are analysed to determine the live rush level.
+            </p>
+
+            <span class="status"
+                  th:text="${rushLevel}">
+                Very Busy
+            </span>
+
+        </div>
+
+        <div class="info-card">
+
+            <h2>Plan Your Visit</h2>
+
+            <p>
+                Historical rush patterns can help you find
+                quieter periods and avoid peak restaurant demand.
+            </p>
+
+            <a class="best-time"
+               href="/best-times">
+                View best times →
+            </a>
+
+        </div>
+
+    </section>
+
+</main>
+
+</body>
+</html>
